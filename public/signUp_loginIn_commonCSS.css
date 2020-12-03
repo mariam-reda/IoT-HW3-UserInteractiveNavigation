@@ -1,0 +1,50 @@
+.container {
+    margin-top: 4rem;
+}
+
+.card-body {
+    margin-top:2rem; 
+    margin-bottom: 2rem;
+}
+
+.input-group-prepend span{
+    background-color: #ffda77;
+    color: black;
+}
+
+.card-header {
+    background-color: #ffda77;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
+
+.card-footer {
+    background-color: #ffda77;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
+
+.card {
+    border-color: #ffda77;
+}
+
+.altLink {
+    color: #120078;
+    font-weight: bold;
+    /* text-decoration: underline; */
+    font-style: italic;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.formHint {
+    font-style: italic;
+    padding-bottom: 0.5rem;
+    margin-top: -0.5rem;
+}
+
+
+#invalidCredentialsMessage {
+    color: red;
+    font-weight: bold;
+}

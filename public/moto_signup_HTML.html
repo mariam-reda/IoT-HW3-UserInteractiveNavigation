@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Moto Signup</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+        <!--custom CSS-->
+        <link rel="stylesheet" href="signUp_loginIn_commonCSS.css">
+    </head>
+
+
+    <body onload="checkSessionDetails()">
+        
+        <!--Signup Form-->
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <div class="card col-6">
+
+                    <div class="card-header">
+                        <h3>Sign Up</h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="formHint">Enter your credentials below to sign up:</p>
+                        <form onsubmit="return false">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Display Name" id="userName" name="userName" required>
+                                
+                            </div>
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-at"></i></span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Email Address" id="signupEmail" name="signupEmail" required>
+                                
+                            </div>
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password" id="signupPassword" name="signupPassword" required>
+                            </div>
+                            <div class="form-check align-items-center">
+                                <input type="checkbox" class="form-check-input" id="rememberMeCheck" name="rememberMeCheck">
+                                <label class="form-check-label" for="rememberMeCheck"> Remember Me </label>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" onclick="checkSignupCredentials()" value="Sign up" class="btn float-right btn-success">
+                            </div>
+                        </form>
+
+                        <div id="invalidCredentialsMessage"></div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-center">
+                            <a href="moto_login_HTML.html"  class="altLink"> Already have an account? Log in Here. </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!--Cookie Info and Consent Bar-->
+        <nav id="cookieConsentBar" class="navbar navbar-dark bg-dark fixed-bottom navbar-expand-sm">
+            <p class="navbar-item" style="color: white;">
+                This site has the option to use cookies to improve your experience with the services provided. However, these <b><i>extra cookies are disabled by default</i></b>.
+                <br/>If you agree to using additional cookies to improve your experience, please click the <b>'Accept'</b> button.  
+            </p>
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <button onclick="acceptCookies()" class="btn btn-primary my-2 my-sm-0  mx-2">Accept Cookie Use</button>
+                </li>
+                <li class="nav-item">
+                    <button onclick="declineCookies()" class="btn btn-danger my-2 my-sm-0">Decline Cookie Use</button>
+                </li>
+            </ul>
+        </nav>
+
+
+        <!---------------------------------------->
+
+        <!--JQuery Script-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!--Bootstrap Scripts-->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    
+        <!--Custom JS/JQuery-->
+        <script src="moto_signup_JS.js"></script>
+    </body>
+
+</html>

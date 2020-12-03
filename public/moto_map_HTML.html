@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Moto Map</title>
+
+        <!--Links-->
+        <!--Bootstrap CSS file-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <!-- Leaflet CSS file -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+        <!-- Leaflet JavaScript file (placed AFTER Leaflet's CSS) -->
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script> 
+    </head>
+
+
+    <body onload="checkSessionDetails();">
+
+        <div class="container-fluid pt-3">
+        <nav class="navbar navbar-light" style="background-color: #ffda77;">
+            <span class="navbar-brand text-info"><b>Interactive Moto Map </b> </span>
+                <span class="navbar-text ml-3" id="welcomeUser"> <!--Welcome ___--> </span>
+                <span class="navbar-text ml-auto mr-3" id="lastAccessed"> <!--Last Accessed: ____--> </span>
+                <button class="btn btn-info my-2 my-sm-0" type="submit" onclick="logoutUser()">Log Out</button>
+          </nav>
+        </div>
+
+        
+        <!-- <p> Interactive Map Below: </p> -->
+        <p id="infoPar" class="mt-2 ml-4"> Click on map to set a destination and determine a route.</p>
+        
+        <!--Map div-->
+        <div id="motoMap_div" style="width: auto; height: 74vh; margin: 2rem; position: relative;" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0"></div>
+        
+
+
+
+        <!--------------------------------------------->
+
+        <!--Paho MQTT Link-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+
+        <!--JQuery Link-->
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+        <!--Bootstrap JS Links-->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!--Leaflet Routing Machine Link-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js" integrity="sha512-FW2A4pYfHjQKc2ATccIPeCaQpgSQE1pMrEsZqfHNohWKqooGsMYCo3WOJ9ZtZRzikxtMAJft+Kz0Lybli0cbxQ==" crossorigin="anonymous"></script>
+        
+        <!-- Custom jQuery file -->
+        <script src="moto_map_jQuery.js" language="JavaScript" type="text/javascript"></script> 
+    </body>
+
+</html>

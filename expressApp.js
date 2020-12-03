@@ -67,7 +67,72 @@ const routeSchema = new mongoose.Schema({
 const RouteCollection = mongoose.model("Route", routeSchema);
 
 //-------------------------------------------
+//MQTT SET UP
+//use mqtt module
+var mqtt = require('mqtt')
+
+var MQTT_TOPIC_EXPRESS = "moto/location-coordinates/new-route";
+
+//connect client (this server) to local mqtt broker
+var client  = mqtt.connect('mqtt://localhost:1883');
+
+//set up client's callback function for on (successfully) connecting
+client.on('connect', function() {
+    console.log("\n MQTT Connected!\n");
+
+    //SUBSCRIBE to selected topic(s)
+    client.subscribe(MQTT_TOPIC_EXPRESS, {qos: 1});
+});
+
+//set up client's callback function for on receiving a message
+client.on('message', function(topic, message) {
+    //('message' is Buffer)
+    
+    //display message in console
+    console.log("\nMQTT Message recieved from Topic '" + topic + "' --", message.toString(), "\n");
+    
+    //carry out action based on message topic
+    if (topic == MQTT_TOPIC_EXPRESS)
+    {
+        console.log("Received new start-destination route.");
+
+        //retrieve logged-in user's email
+        console.log("LoggedInUser:", loggedInUserEmail);
+
+        //parse message
+        var newRouteMsg = JSON.parse(message); 
+
+        //add new route record - create a document (instance on db collection)
+        var newRouteRecord = new RouteCollection({
+            email: loggedInUserEmail,
+            startingLocation: {lat: newRouteMsg.startingCoordinates.lat, long: newRouteMsg.startingCoordinates.lng},
+            destinationLocation: {lat: newRouteMsg.destinationCoordinates.lat, long: newRouteMsg.destinationCoordinates.lng}
+        });
+        //save record in db
+        newRouteRecord.save().then(() => {
+            console.log('New User Route has been saved to Database.');
+        });
+    }
+
+    //client.end();
+});
+
+//------
+//additional callback functions
+client.on('close', () => {
+    console.log("\n MQTT client disconnected.\n");
+});
+
+client.on('error', (err) => {
+    console.log("\n ERROR:", err, "\n");
+    client.end();
+});
+
+
+//-------------------------------------------
 //respond to requests
+
+var loggedInUserEmail = ""; /*needed later for writing new location routes to DB*/
 
 //---------------------
 app.get('/', function(req, res)
@@ -121,6 +186,9 @@ app.get('/logUserIn', function(req, res) {
     {
         //set user email in session cookie (strictly necessary cookie)
         req.session.email = req.query.loginEmail;
+
+        //also store email on server
+        loggedInUserEmail = req.query.loginEmail;
 
         //store user's 'Remember Me' status preference
         req.session.rememberUser = req.query.rememberMe;    /*can be set without accepting cookies*/
@@ -271,25 +339,25 @@ app.get('/getSessionDetails', function(req, res) {
 });
 
 //---------------------
-app.get('/saveNewLocationCoordinates', function(req, res) {
-    console.log("\nGET request received for '/saveNewLocationCoordinates'.");
+// app.get('/saveNewLocationCoordinates', function(req, res) {
+//     console.log("\nGET request received for '/saveNewLocationCoordinates'.");
 
-    //retrieve start and destination coordinates from request query
-    console.log("Request Query:", req.query);
-    console.log("LoggedInUser:", req.session.email);
+//     //retrieve start and destination coordinates from request query
+//     console.log("Request Query:", req.query);
+//     console.log("LoggedInUser:", req.session.email);
 
-    //add new route record - create a document (instance on db collection)
-    var newRouteRecord = new RouteCollection({
-        email: req.session.email,
-        startingLocation: {lat: req.query.startingCoordinates.lat, long: req.query.startingCoordinates.lng},
-        destinationLocation: {lat: req.query.destinationCoordinates.lat, long: req.query.destinationCoordinates.lng}
-    });
-    //save record in db
-    newRouteRecord.save().then(() => {
-        console.log('New User Route has been saved to Database.');
-        res.send("Successful Route save.");
-    });
-});
+//     //add new route record - create a document (instance on db collection)
+//     var newRouteRecord = new RouteCollection({
+//         email: req.session.email,
+//         startingLocation: {lat: req.query.startingCoordinates.lat, long: req.query.startingCoordinates.lng},
+//         destinationLocation: {lat: req.query.destinationCoordinates.lat, long: req.query.destinationCoordinates.lng}
+//     });
+//     //save record in db
+//     newRouteRecord.save().then(() => {
+//         console.log('New User Route has been saved to Database.');
+//         res.send("Successful Route save.");
+//     });
+// });
 
 
 //---------------------
@@ -302,6 +370,9 @@ app.get('/logUserOut', function(req, res) {
     //delete session
     req.session = null;
     //req.session.destroy();
+
+    //clear stored loggedInEmail
+    loggedInUserEmail = "";
 
     console.log("Session has been deleted and cookies have been cleared.");
     res.send("Session Deleted");

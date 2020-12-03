@@ -1,4 +1,5 @@
-const MQTT_TOPIC = "moto/location-coordinates";
+const MQTT_TOPIC = "moto/location-coordinates"; /*to publish to arrow all coordinate changes*/
+var MQTT_TOPIC_EXPRESS = "moto/location-coordinates/new-route"; /*to publish to server for new routes set*/
 var rememberUser_set;   /*whether user selected 'Remember Me' option or not*/
 var userAlreadyLoggedOut = false;   /*used to avoid logging user out twice and causing error (logOut on button click then on window.beforeUnload triggered)*/
 
@@ -386,36 +387,41 @@ function routeMap(current_latlong, dest_latlong, updatedLocation)
     }));
     message.destinationName = MQTT_TOPIC;
     client.send(message);
-    console.log("Coordinates shared through MQTT.");
+    console.log("Coordinates shared through MQTT to Arrow.");
 
     //update the server with ONLY the start and destination coordinates (not updated if CURRENT coordinates change; only concerned with inital route set)
     if (updatedLocation == "destination")   //new destination set (i.e. not an update of the current location when moving)
     {
-        updateStoredLocationsOnServer(current_latlong, dest_latlong);
+        //updateStoredLocationsOnServer(current_latlong, dest_latlong);
+
+        //publish to server topic too
+        message.destinationName = MQTT_TOPIC_EXPRESS;
+        client.send(message);
+        console.log("Coordinates shared through MQTT to server.")
     }
 }
 
 //-------------------------------------------------------------
 //updateStoredLocationsOnServer() - function sends locations' coordinates to Express Server to save the information in a MongoDB database
 // to keep a record of the user's routes.
-function updateStoredLocationsOnServer(startLoc, destinationLoc)
-{
-    console.log("Called updateStoredLocationsOnServer() method.");
-    console.log("StartLoc = " + startLoc + ", DestinationLoc = " + destinationLoc);
+// function updateStoredLocationsOnServer(startLoc, destinationLoc)
+// {
+//     console.log("Called updateStoredLocationsOnServer() method.");
+//     console.log("StartLoc = " + startLoc + ", DestinationLoc = " + destinationLoc);
 
-    //send location coordinates to the Express Server
-    $.get("/saveNewLocationCoordinates",     
-            {   startingCoordinates: {lat: startLoc.lat, lng: destinationLoc.lng},
-                destinationCoordinates: {lat: startLoc.lat, lng: destinationLoc.lng}
-            },
+//     //send location coordinates to the Express Server
+//     $.get("/saveNewLocationCoordinates",     
+//             {   startingCoordinates: {lat: startLoc.lat, lng: destinationLoc.lng},
+//                 destinationCoordinates: {lat: startLoc.lat, lng: destinationLoc.lng}
+//             },
         
-    ).done(function(data) {                 //success callback function
-        console.log("Server has been updated. Response:", data);
+//     ).done(function(data) {                 //success callback function
+//         console.log("Server has been updated. Response:", data);
 
-    }).fail(function(jqxhr, settings, ex) {   //failure to connect to server callback function
-        alert("Error. Could not connect to server.\n" + ex);
-    });
-}
+//     }).fail(function(jqxhr, settings, ex) {   //failure to connect to server callback function
+//         alert("Error. Could not connect to server.\n" + ex);
+//     });
+// }
 
 //-------------------------------------------------------------
 //postLocationsToServer() - function executes POST requests to server (when new destination is set)
